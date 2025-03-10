@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Onboarding and HR Dashboard</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    .form-container {
+      width: 90%;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0px 10px;
+    }
+    .progress-step {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-bottom: 2px solid #ccc;
+      color: #777;
+      font-size: 14px;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .progress-step.active {
+      border-color: #007bff;
+      color: #007bff;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    label {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input, select, button {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #007bff;
+    }
+    button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .previous {
+      background-color: #ffc107;
+      color: #fff;
+    }
+    .previous:hover {
+      background-color: #e0a800;
+    }
+    .error-message {
+      color: #ff0000;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .search-box {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .employee-card {
+      background-color: #f7f7f7;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .employee-details {
+      display: flex;
+      gap: 20px;
+    }
+    .progress-bar {
+      width: 50%;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 10px;
+      width: 0;
+      background-color: #28a745;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Employee Onboarding Form Section -->
+<div class="form-container">
+  <h1>Employee Onboarding Form</h1>
+  <div class="progress-bar">
+    <span class="progress-step active">Personal Details</span>
+    <span class="progress-step">Contact Information</span>
+    <span class="progress-step">Address Information</span>
+    <span class="progress-step">Educational Details</span>
+    <span class="progress-step">ID Uploads</span>
+    <span class="progress-step">Previous Company</span>
+  </div>
+  <form id="onboardingForm" onsubmit="return handleSubmit(event)">
+    <!-- Step 1: Personal Details -->
+    <div class="step active" id="step1">
+ 
+        <h2>Personal Details</h2>
+        <div class="form-group">
+          <label for="firstName">First Name*</label>
+          <input type="text" id="firstName" required>
+          <div class="error-message" id="firstNameError"></div>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name*</label>
+          <input type="text" id="lastName" required>
+          <div class="error-message" id="lastNameError"></div>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth*</label>
+          <input type="text" id="dob" placeholder="DD-MM-YYYY" required>
+          <div class="error-message" id="dobError"></div>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender*</label>
+          <select id="gender" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+            <option value="preferNotToSay">Prefer not to say</option>
+          </select>
+          <div class="error-message" id="genderError"></div>
+        </div>
+        <div class="form-group">
+          <label for="bloodGroup">Blood Group*</label>
+          <select id="bloodGroup" required>
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+          <div class="error-message" id="bloodGroupError"></div>
+        </div>
+        <div class="form-group">
+          <label for="maritalStatus">Marital Status*</label>
+          <select id="maritalStatus" required>
+            <option value="">Select Marital Status</option>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
+          </select>
+          <div class="error-message" id="maritalStatusError"></div>
+        </div>
+        <div class="form-group">
+          <label for="guardianName">Guardian Name*</label>
+          <input type="text" id="guardianName" required>
+          <div class="error-message" id="guardianNameError"></div>
+        </div>
+        <div class="form-group">
+          <label for="guardianPhone">Guardian Mobile Number*</label>
+          <input type="tel" id="guardianPhone" required>
+          <div class="error-message" id="guardianPhoneError"></div>
+        </div>
+        <div class="form-group">
+          <label for="guardianRelation">Guardian Relation*</label>
+          <input type="text" id="guardianRelation" required>
+          <div class="error-message" id="guardianRelationError"></div>
+        </div>
+ 
+      <!-- Your previous form elements here -->
+      <div class="buttons">
+        <button type="button" onclick="nextStep(1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Contact Information -->
+    <div class="step" id="step2">
+      <h2>Contact Information</h2>
+      <div class="form-group">
+        <label for="email">Email*</label>
+        <input type="email" id="email" required>
+        <div class="error-message" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone*</label>
+        <input type="tel" id="phone" required>
+        <div class="error-message" id="phoneError"></div>
+      </div>
+      <div class="form-group">
+        <label for="emergencyContactName">Emergency Contact Name*</label>
+        <input type="text" id="emergencyContactName" required>
+        <div class="error-message" id="emergencyContactNameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="emergencyContactRelation">Emergency Contact Relation*</label>
+        <input type="text" id="emergencyContactRelation" required>
+        <div class="error-message" id="emergencyContactRelationError"></div>
+      </div>
+      <div class="form-group">
+        <label for="emergencyContactNumber">Emergency Contact Number*</label>
+        <input type="tel" id="emergencyContactNumber" required>
+        <div class="error-message" id="emergencyContactNumberError"></div>
+      </div>
+      <div class="buttons">
+        <button type="button" class="previous" onclick="previousStep(2)">Previous</button>
+        <button type="button" onclick="nextStep(2)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Address Information -->
+    <div class="step" id="step3">
+      <h2>Address Information</h2>
+      <div class="form-group">
+        <label for="street">Street*</label>
+        <input type="text" id="street" required>
+        <div class="error-message" id="streetError"></div>
+      </div>
+      <div class="form-group">
+        <label for="city">City*</label>
+        <select id="city" required>
+          <option value="">Select City</option>
+          <option value="city1">City 1</option>
+          <option value="city2">City 2</option>
+          <!-- Add more cities -->
+        </select>
+        <div class="error-message" id="cityError"></div>
+      </div>
+      <div class="form-group">
+        <label for="state">State*</label>
+        <select id="state" required>
+          <option value="">Select State</option>
+          <option value="state1">State 1</option>
+          <option value="state2">State 2</option>
+          <!-- Add more states -->
+        </select>
+        <div class="error-message" id="stateError"></div>
+      </div>
+      <div class="form-group">
+        <label for="pinCode">PIN Code*</label>
+        <input type="text" id="pinCode" required>
+        <div class="error-message" id="pinCodeError"></div>
+      </div>
+      <div class="buttons">
+        <button type="button" class="previous" onclick="previousStep(3)">Previous</button>
+        <button type="button" onclick="nextStep(3)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Educational Details -->
+    <div class="step" id="step4">
+      <h2>Educational Details</h2>
+      <div class="form-group">
+        <label for="educationLevel">Education Level*</label>
+        <select id="educationLevel" required>
+          <option value="">Select Education Level</option>
+          <option value="highSchool">High School</option>
+          <option value="bachelor">Bachelor's</option>
+          <option value="masters">Master's</option>
+          <option value="doctorate">Doctorate</option>
+        </select>
+        <div class="error-message" id="educationLevelError"></div>
+      </div>
+      <div class="form-group">
+        <label for="stream">Stream/Specialization*</label>
+        <input type="text" id="stream" required>
+        <div class="error-message" id="streamError"></div>
+      </div>
+      <div class="form-group">
+        <label for="percentage">Percentage/CGPA*</label>
+        <input type="number" id="percentage" required>
+        <div class="error-message" id="percentageError"></div>
+      </div>
+      <div class="form-group">
+        <label for="educationDocument">Upload Documents*</label>
+        <input type="file" id="educationDocument" accept=".pdf,.jpg,.png" required>
+        <div class="error-message" id="educationDocumentError"></div>
+      </div>
+      <div class="buttons">
+        <button type="button" class="previous" onclick="previousStep(4)">Previous</button>
+        <button type="button" onclick="nextStep(4)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 5: ID Uploads -->
+    <div class="step" id="step5">
+      <h2>ID Uploads</h2>
+      <div class="form-group">
+        <label for="aadhaarNumber">Aadhaar Number*</label>
+        <input type="text" id="aadhaarNumber" required>
+        <div class="error-message" id="aadhaarNumberError"></div>
+      </div>
+      <div class="form-group">
+        <label for="aadhaarFile">Upload Aadhaar Card*</label>
+        <input type="file" id="aadhaarFile" accept=".pdf,.jpg,.png" required>
+        <div class="error-message" id="aadhaarFileError"></div>
+      </div>
+      <div class="form-group">
+        <label for="panNumber">PAN Number*</label>
+        <input type="text" id="panNumber" required>
+        <div class="error-message" id="panNumberError"></div>
+      </div>
+      <div class="form-group">
+        <label for="panFile">Upload PAN Card*</label>
+        <input type="file" id="panFile" accept=".pdf,.jpg,.png" required>
+        <div class="error-message" id="panFileError"></div>
+      </div>
+      <div class="buttons">
+        <button type="button" class="previous" onclick="previousStep(5)">Previous</button>
+        <button type="button" onclick="nextStep(5)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Previous Company Details -->
+    <div class="step" id="step6">
+      <h2>Previous Company</h2>
+      <div class="form-group">
+        <label for="companyName">Company Name*</label>
+        <input type="text" id="companyName" required>
+        <div class="error-message" id="companyNameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="designation">Designation*</label>
+        <input type="text" id="designation" required>
+        <div class="error-message" id="designationError"></div>
+      </div>
+      <div class="form-group">
+        <label for="employmentType">Employment Type*</label>
+        <select id="employmentType" required>
+          <option value="">Select Employment Type</option>
+          <option value="fullTime">Full Time</option>
+          <option value="partTime">Part Time</option>
+          <option value="contract">Contract</option>
+          <option value="internship">Internship</option>
+        </select>
+        <div class="error-message" id="employmentTypeError"></div>
+      </div>
+      <div class="form-group">
+        <label for="startDate">Start Date*</label>
+        <input type="date" id="startDate" required>
+        <div class="error-message" id="startDateError"></div>
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date*</label>
+        <input type="date" id="endDate" required>
+        <div class="error-message" id="endDateError"></div>
+      </div>
+      <div class="form-group">
+        <label for="companyFile">Upload Employment Documents*</label>
+        <input type="file" id="companyFile" accept=".pdf,.jpg,.png" required>
+        <div class="error-message" id="companyFileError"></div>
+      </div>
+      <div class="form-group">
+        <input type="checkbox" id="currentEmployer"> Current Employer
+      </div>
+      <div class="buttons">
+        <button type="button" class="previous" onclick="previousStep(6)">Previous</button>
+        <button type="submit">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- HR Dashboard -->
+<div class="dashboard" id="dashboard" style="display:none;">
+  <h2>HR Dashboard</h2>
+  <div id="employeeList" class="employee-list">
+      <h3>Employee Details</h3>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  const steps = document.querySelectorAll('.step');
+  const progressSteps = document.querySelectorAll('.progress-step');
+
+  let employeeData = []; // Array to store employee details
+
+  // Update the progress bar
+  function updateProgress() {
+      progressSteps.forEach((step, index) => {
+          if (index < currentStep) {
+              step.classList.add('active');
+          } else {
+              step.classList.remove('active');
+          }
+      });
+  }
+
+  // Show the current step
+  function showStep(step) {
+      steps.forEach((stepDiv, index) => {
+          stepDiv.classList.remove('active');
+          if (index === step - 1) {
+              stepDiv.classList.add('active');
+          }
+      });
+  }
+
+  // Move to the next step
+  function nextStep(step) {
+      if (validateStep(step)) {
+          currentStep++;
+          showStep(currentStep);
+          updateProgress();
+      }
+  }
+
+  // Move to the previous step
+  function previousStep(step) {
+      currentStep--;
+      showStep(currentStep);
+      updateProgress();
+  }
+
+  // Validate the current step
+  function validateStep(step) {
+      let isValid = true;
+      const stepFields = document.querySelectorAll(`#step${step} input[required], #step${step} select[required]`);
+      stepFields.forEach((field) => {
+          const errorElement = document.getElementById(`${field.id}Error`);
+          if (!field.value.trim()) {
+              field.classList.add('error');
+              errorElement.textContent = `${field.name || field.id} is required`;
+              isValid = false;
+          } else {
+              field.classList.remove('error');
+              errorElement.textContent = '';
+          }
+      });
+      return isValid;
+  }
+
+  // Handle form submission
+  function handleSubmit(event) {
+      event.preventDefault();
+
+      // Collect all form data
+      let employee = {
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          dob: document.getElementById('dob').value,
+          gender: document.getElementById('gender').value,
+          bloodGroup: document.getElementById('bloodGroup').value,
+          maritalStatus: document.getElementById('maritalStatus').value,
+          guardianName: document.getElementById('guardianName').value,
+          guardianPhone: document.getElementById('guardianPhone').value,
+          guardianRelation: document.getElementById('guardianRelation').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          emergencyContactName: document.getElementById('emergencyContactName').value,
+          emergencyContactRelation: document.getElementById('emergencyContactRelation').value,
+          emergencyContactNumber: document.getElementById('emergencyContactNumber').value,
+          address: document.getElementById('address').value,
+          city: document.getElementById('city').value,
+          state: document.getElementById('state').value,
+          zipcode: document.getElementById('zipcode').value,
+          degree: document.getElementById('degree').value,
+          university: document.getElementById('university').value,
+          graduationYear: document.getElementById('graduationYear').value,
+          idProof: document.getElementById('idProof').value,
+          photo: document.getElementById('photo').value,
+          previousCompany: document.getElementById('previousCompany').value,
+          previousRole: document.getElementById('previousRole').value,
+          employmentDuration: document.getElementById('employmentDuration').value,
+          date: new Date().toLocaleString(),
+          status: "Pending" // Initially, the status will be "Pending"
+      };
+
+      // Store the employee data
+      employeeData.push(employee);
+
+      // Switch to HR Dashboard view
+      showDashboard();
+  }
+
+  // Display the HR Dashboard
+  function showDashboard() {
+      document.querySelector('.form-container').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+
+      // Display all employees' data
+      const employeeListContainer = document.getElementById('employeeList');
+      employeeListContainer.innerHTML = '';
+
+      employeeData.forEach((employee, index) => {
+          const employeeItem = document.createElement('div');
+          employeeItem.classList.add('employee-item');
+          employeeItem.innerHTML = `
+              <p><strong>Reference Number:</strong> ${index + 1}</p>
+              <p><strong>Name:</strong> ${employee.firstName} ${employee.lastName}</p>
+              <p><strong>Phone:</strong> ${employee.phone}</p>
+              <p><strong>Email:</strong> ${employee.email}</p>
+              <p><strong>Status:</strong> <span class="status ${employee.status.toLowerCase()}">${employee.status}</span></p>
+              <p><strong>Time Submitted:</strong> ${employee.date}</p>
+          `;
+          employeeListContainer.appendChild(employeeItem);
+      });
+  }
+</script>
+
+</body>
+
+</html>
